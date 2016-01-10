@@ -23,6 +23,18 @@ angular.module('taskManager', ['ionic'])
   });
 })
 
+.factory('Categories', function(){
+  return{
+    all : function(){
+      var categoryString = window.localStorage['categories'];
+      if(categoryString){
+        return angular.fromJson(categoryString);
+      }
+      return [];
+    }
+  };
+})
+
 .controller('TaskCtrl', function($scope, $ionicModal){
   $scope.tasks = [];
   
@@ -33,6 +45,14 @@ angular.module('taskManager', ['ionic'])
     scope: $scope,
     animation: 'slide-in-up'
   });
+  
+  $scope.createTask = function(task){
+    $scope.tasks.push({
+      title: task.title
+    });
+    $scope.taskModal.hide();
+    task.title="";
+  };
 
   $scope.newTask = function(){
     $scope.taskModal.show();
