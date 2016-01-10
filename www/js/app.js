@@ -35,8 +35,22 @@ angular.module('taskManager', ['ionic'])
   };
 })
 
-.controller('TaskCtrl', function($scope, $ionicModal){
-  $scope.tasks = [];
+.controller('TaskCtrl', function($scope, $ionicModal, Categories){
+  var createCategory = function(categoryTitle){
+    var newCategory = Categories.newCategory(categoryTitle);
+    $scope.categories.push(newCategory);
+    Categories.save($scope.categories);
+    $scope.selectCategory(newCategory, $scope.categories.length-1);
+  };
+  
+  $scope.categories = Categories.all();
+  
+  $scope.newCategory = function(){
+    var categoryTitle = prompt('Category name');
+    if(categoryTitle){
+      createCategory(categoryTitle);
+    }
+  };
   
   // Load Modal
   $ionicModal.fromTemplateUrl('new-task.html', function(modal){
