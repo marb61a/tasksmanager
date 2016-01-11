@@ -31,6 +31,22 @@ angular.module('taskManager', ['ionic'])
         return angular.fromJson(categoryString);
       }
       return [];
+    },
+    save: function(categories){
+      window.localStorage['categories'] = angular.toJson(categories);
+    },
+    newCategory: function(categoryTitle){
+      // Add Category
+      return {
+        title: categoryTitle,
+        tasks: []
+      };
+    },
+    getLastActiveIndex: function(){
+      return parseInt(window.localStorage['lastActiveCategory']) || 0;
+    },
+    setLastActiveIndex: function(index){
+      window.localStorage['lastActiveCategory'] = index;
     }
   };
 })
