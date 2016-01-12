@@ -85,11 +85,24 @@ angular.module('taskManager', ['ionic'])
   });
   
   $scope.createTask = function(task){
-    $scope.tasks.push({
+    if(!$scope.activeCategory || !task){
+      return;
+    }
+    $scope.activeCategory.tasks.push({
       title: task.title
     });
     $scope.taskModal.hide();
-    task.title="";
+    // Save Task
+    Categories.save($scope.categories);
+  };
+  
+  $scope.removeTask = function(task){
+    for(i = 0; i < $scope.activeCategory.tasks.length;i++){
+      if($scope.activeCategory.tasks[i].title == task.title){
+        $scope.activeCategory.tasks.splice(i, 1);
+        Categories.save($scope.categories);
+      }
+    }
   };
 
   $scope.newTask = function(){
@@ -103,5 +116,17 @@ angular.module('taskManager', ['ionic'])
   $scope.toggleCategories = function(){
     $ionicSideMenuDelegate.toggleLeft();
   };
+  
+  $timeout(function(){
+    if($scope.categories.length == 0){
+      while(true){
+        var categoryTitle = prompt('Please Create A Category');
+        if(categoryTitle){
+          createCategory(categoryTitle);
+          break;
+        }
+      }
+    }
+  });
   
 });
